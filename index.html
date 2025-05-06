@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio de Sesión</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100vh;
+      background-color: #f0f0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .login-screen img {
+      width: 100px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    .login-screen h2 {
+      margin: 0 0 20px;
+    }
+    .login-screen input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+    }
+    .main-interface {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+    header img {
+      height: 40px;
+    }
+    .main {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+    .nav {
+      width: 170px;
+      background-color: #f5f5f5;
+      border-right: 1px solid #ddd;
+      padding-top: 10px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      color: #333;
+    }
+    .nav-item:hover {
+      background-color: #e0e0e0;
+    }
+    .nav-item.selected {
+      background-color: #e0e0e0;
+      font-weight: bold;
+    }
+    .inbox {
+      width: 450px;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      background-color: #fff;
+      flex-shrink: 0;
+    }
+    .email-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      width: 100%;
+    }
+    .email-item:hover {
+      background-color: #f1f3f4;
+    }
+    .email-content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .email-subject {
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .email-body {
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-screen" id="loginScreen">
+    <img src="https://files.lu-rp.ovh/static/assets/images/ordenadores/lifemail.png" alt="User Avatar">
+    <h2>Kim Mayers</h2>
+    <h4>Responsable de logística</h4>
+    <input type="password" id="passwordInput" placeholder="Introduce tu contraseña">
+  </div>
+
+  <div class="main-interface" id="mainInterface">
+    <header>
+      <img src="https://files.lu-rp.ovh/static/assets/images/ordenadores/lifemail.png" alt="Gmail Logo" />
+    </header>
+    <div class="main">
+      <div class="nav">
+        <div class="nav-item selected">Recibidos</div>
+        <div class="nav-item">Destacados</div>
+        <div class="nav-item">Enviados</div>
+        <div class="nav-item">Borrados</div>
+        <div class="nav-item">Spam</div>
+        <div class="nav-item">Borradores</div>
+      </div>
+      <div class="inbox" id="inbox">
+        <!-- Asuntos de los correos -->
+      </div>
+      <div class="email-content" id="emailContent">
+        <div class="email-subject">Selecciona un correo para leerlo</div>
+        <div class="email-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const passwordInput = document.getElementById('passwordInput');
+    const loginScreen = document.getElementById('loginScreen');
+    const mainInterface = document.getElementById('mainInterface');
+
+    passwordInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        if (passwordInput.value === 'hastaloscoj0nes') {
+          loginScreen.style.display = 'none';
+          mainInterface.style.display = 'flex';
+        } else {
+          alert('Contraseña incorrecta');
+        }
+      }
+    });
+
+    const emails = [
+      {
+        subject: "Confirmación de envío - Pedido #4589",
+        body: `Hola, Anne:
+
+Te escribo para confirmar que la carga correspondiente al pedido #7821 ha sido correctamente consolidada en el contenedor asignado y ya se encuentra en tránsito rumbo al puerto de Los Santos. El buque de salida es el MV “Ocean Spirit” con ETA prevista para el 12 de mayo a las 08:00.
+
+Adjunto encontrarás:
+- Lista de empaque
+- Factura comercial
+- Certificado de origen
+- Manifiesto de carga
+
+Es importante que revises los documentos y nos confirmes que todo está en orden para evitar demoras en aduanas. El agente portuario nos ha pedido especial atención en los códigos arancelarios de los productos electrónicos incluidos.
+
+Además, te informo que el seguro de carga ha sido activado a través de GlobalSecure Ltd. con cobertura completa hasta destino final.
+
+Si hay cualquier inconveniente, estoy pendiente por este canal.
+
+Saludos cordiales,  
+Jason Taylor  
+Departamento de Operaciones`
+      },
+      {
+        subject: "Revisión urgente de documentación aduanera",
+        body: `Buenos días equipo,
+
+Detectamos una discrepancia en la declaración de aduana del contenedor 145-AZ destinado a Vice City. El número de factura consignado no coincide con el que nos proporcionó el proveedor y eso ha generado una observación por parte del agente de aduanas argentino.
+
+Necesitamos que se revise lo siguiente:
+- Coincidencia exacta entre factura comercial y documento de embarque.
+- Verificar el peso bruto declarado.
+- Confirmar que los certificados sanitarios están firmados y sellados.
+
+Por favor, tratemos esto con carácter urgente. Cualquier error en esta etapa puede resultar en sanciones y retención del cargamento.
+
+Gracias de antemano por vuestra colaboración.
+
+Atentamente,  
+Marianne Lopez  
+Coordinadora de Exportaciones`
+      },
+      {
+        subject: "Retraso en la llegada del buque MSC Horizon",
+        body: `Estimados,
+
+Lamentablemente hemos tenido una nueva incidencia con la empresa de transporte subcontratada para los envíos locales en Sandy Shores. El camión asignado al despacho #6609 sufrió un desperfecto mecánico y la mercancía quedó retenida en el almacén de Paleto Bay.
+
+La mercancía corresponde a productos perecederos, por lo tanto, urge encontrar una solución alternativa. Ya nos hemos puesto en contacto con el operador logístico para exigir el traslado inmediato a otro vehículo disponible.
+
+Solicito por favor:
+- Revisar el contrato de servicio con dicha empresa.
+- Valorar penalizaciones por incumplimiento de SLA.
+- Establecer una vía de comunicación directa para casos críticos.
+
+Espero vuestras respuestas antes del cierre de jornada.
+
+Saludos,  
+Fer Marshall  
+Jefe de Logística Regional`
+      },
+      {
+        subject: "Faltan documentos para el envío a Grapeseed",
+        body: `Hola equipo,
+
+El envío con destino a Lima está en espera porque falta el certificado fitosanitario. Por favor revisad y reenviadlo cuanto antes.
+
+Gracias,
+Patrick - Coordinadora de Exportaciones`
+      },
+      {
+        subject: "Reunión con proveedor chino - Propuesta de agenda",
+        body: `Buenos días,
+
+Para la videollamada con nuestro proveedor de Shenzhen, propongo la siguiente agenda:
+1. Revisión de plazos
+2. Costes de transporte
+3. Novedades sobre regulaciones
+
+Saludos,
+Mark Simmons - Jefe de Importaciones`
+      },
+      {
+        subject: "Confirmación de entrega local - Referencia 9207",
+        body: `Hola,
+
+El paquete con referencia 9207 ha sido entregado esta tarde en el almacén de Los Santos. Ya se encuentra registrado en el sistema.
+
+Un saludo,
+Eva - Departamento de logística interna`
+      },
+      {
+        subject: "Solicitud de cotización urgente - Envío aéreo",
+        body: `Estimado proveedor,
+
+Necesitamos una cotización urgente para un envío aéreo de 250 kg desde Liberty City a Los Santos, con entrega en 48h.
+
+Atentamente,
+Louise Peña - Compras`
+      },
+      {
+        subject: "Cambio en las normativas de aduana - Atención requerida",
+        body: `Compañeros,
+
+La aduana ha actualizado sus políticas para productos electrónicos. Es crucial que revisemos nuestros procedimientos antes de la siguiente importación.
+
+Gracias,
+Tess
+Legal y compliance`
+      },
+      {
+        subject: "Actualización de stock en tránsito",
+        body: `Hola equipo,
+
+Se ha actualizado el inventario de mercancía en tránsito. Podéis acceder a los nuevos datos en el panel de seguimiento.
+
+Saludos,
+Claudia Laurent
+Planificación logística`
+      },
+      {
+        subject: "Problemas con el proveedor de embalajes",
+        body: `Hola,
+
+El proveedor de embalajes ha reportado escasez de materiales. Estamos buscando una alternativa para no afectar los próximos envíos.
+
+Avisaremos con más detalles pronto.
+--
+Ralph Lawrence - Compras logísticas`
+      }
+    ];
+
+    const inbox = document.getElementById('inbox');
+    const emailContent = document.getElementById('emailContent');
+    const subjectDiv = emailContent.querySelector('.email-subject');
+    const bodyDiv = emailContent.querySelector('.email-body');
+
+    emails.forEach((email) => {
+      const item = document.createElement('div');
+      item.className = 'email-item';
+      item.textContent = email.subject;
+      item.addEventListener('click', () => {
+        subjectDiv.textContent = email.subject;
+        bodyDiv.textContent = email.body;
+      });
+      inbox.appendChild(item);
+    });
+  </script>
+</body>
+</html>
